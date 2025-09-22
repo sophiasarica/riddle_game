@@ -175,7 +175,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
         case 'medium':
           points = 2;
           break;
-        case 'hard':
+        case 'difficult':
           points = 3;
           break;
       }
@@ -238,7 +238,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
 
   const playSound = (type: 'success' | 'error' | 'hint') => {
     // Simple sound effects using Web Audio API
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
 
