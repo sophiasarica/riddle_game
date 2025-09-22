@@ -65,15 +65,13 @@ const GameComplete: React.FC<GameCompleteProps> = ({
           <p>{getPerformanceMessage()}</p>
         </div>
 
-        <div className="completion-actions">
-          <button 
-            className="play-again-button"
-            onClick={onStartNewGame}
-            aria-label="Start a new riddle game"
-          >
-            🎮 Play Again
-          </button>
-        </div>
+        <button 
+          className="play-again-button"
+          onClick={onStartNewGame}
+          aria-label="Start a new riddle game"
+        >
+          🎮 Play Again
+        </button>
 
         {accessibilitySettings.showInstructions && (
           <div className="completion-tips">

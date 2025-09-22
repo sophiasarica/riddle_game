@@ -4,9 +4,10 @@ import { AccessibilitySettings } from '../types';
 interface WelcomeScreenProps {
   onStartGame: () => void;
   accessibilitySettings: AccessibilitySettings;
+  children?: React.ReactNode;
 }
 
-const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStartGame, accessibilitySettings }) => {
+const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStartGame, accessibilitySettings, children }) => {
   return (
     <div className="welcome-screen">
       <div className="welcome-content">
@@ -35,13 +36,16 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStartGame, accessibilit
         <div className="game-features">
           <h3>What Makes This Game Special:</h3>
           <ul>
-            <li>🎯 Easy riddles perfect for 5th graders</li>
+            <li>🎯 Riddles perfect for 5th graders</li>
             <li>♿ Built with accessibility in mind</li>
             <li>📱 Works great on phones and tablets</li>
             <li>🎨 Calming colors and clear text</li>
             <li>🔊 Sound effects (can be turned off)</li>
+            <li>💻 Technology and digital life focus</li>
           </ul>
         </div>
+
+        {children}
 
         <button 
           className="start-button"

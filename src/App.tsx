@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { GameState, AccessibilitySettings } from './types';
-import { getRandomRiddles } from './data/riddles';
+import { getRandomRiddlesByDifficulty } from './data/riddles';
 import GameBoard from './components/GameBoard';
 import WelcomeScreen from './components/WelcomeScreen';
 import AccessibilityPanel from './components/AccessibilityPanel';
+import DifficultySwitch from './components/DifficultySwitch';
 import './App.css';
 
 const initialGameState: GameState = {
@@ -11,10 +12,15 @@ const initialGameState: GameState = {
   score: 0,
   totalRiddles: 0,
   completedRiddles: [],
+  skippedRiddles: [],
+  revealedAnswers: [],
   gameStatus: 'paused',
   showHint: false,
+  showVisualHint: false,
+  showAnswer: false,
   userAnswer: '',
-  feedback: 'none'
+  feedback: 'none',
+  selectedDifficulty: 'easy'
 };
 
 const initialAccessibilitySettings: AccessibilitySettings = {
@@ -28,7 +34,7 @@ const initialAccessibilitySettings: AccessibilitySettings = {
 function App() {
   const [gameState, setGameState] = useState<GameState>(initialGameState);
   const [accessibilitySettings, setAccessibilitySettings] = useState<AccessibilitySettings>(initialAccessibilitySettings);
-  const [currentRiddles, setCurrentRiddles] = useState(getRandomRiddles(10));
+  const [currentRiddles, setCurrentRiddles] = useState(getRandomRiddlesByDifficulty('easy', 10));
 
   // Load accessibility settings from localStorage on mount
   useEffect(() => {
@@ -44,10 +50,11 @@ function App() {
   }, [accessibilitySettings]);
 
   const startNewGame = () => {
-    const newRiddles = getRandomRiddles(10);
+    const newRiddles = getRandomRiddlesByDifficulty(gameState.selectedDifficulty, 10);
     setCurrentRiddles(newRiddles);
     setGameState({
       ...initialGameState,
+      selectedDifficulty: gameState.selectedDifficulty,
       totalRiddles: newRiddles.length,
       gameStatus: 'playing'
     });
@@ -72,7 +79,12 @@ function App() {
         <WelcomeScreen 
           onStartGame={startNewGame}
           accessibilitySettings={accessibilitySettings}
-        />
+        >
+          <DifficultySwitch
+            selectedDifficulty={gameState.selectedDifficulty}
+            onDifficultyChange={(difficulty) => updateGameState({ selectedDifficulty: difficulty })}
+          />
+        </WelcomeScreen>
       ) : (
         <GameBoard 
           gameState={gameState}
@@ -80,7 +92,23 @@ function App() {
           onGameStateChange={updateGameState}
           accessibilitySettings={accessibilitySettings}
           onStartNewGame={startNewGame}
-        />
+        >
+          <DifficultySwitch
+            selectedDifficulty={gameState.selectedDifficulty}
+            onDifficultyChange={(difficulty) => {
+              updateGameState({ selectedDifficulty: difficulty });
+              // Restart game with new difficulty
+              const newRiddles = getRandomRiddlesByDifficulty(difficulty, 10);
+              setCurrentRiddles(newRiddles);
+              setGameState({
+                ...initialGameState,
+                selectedDifficulty: difficulty,
+                totalRiddles: newRiddles.length,
+                gameStatus: 'playing'
+              });
+            }}
+          />
+        </GameBoard>
       )}
     </div>
   );

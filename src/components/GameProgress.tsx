@@ -4,10 +4,16 @@ interface GameProgressProps {
   current: number;
   total: number;
   score: number;
+  skippedCount?: number;
 }
 
-const GameProgress: React.FC<GameProgressProps> = ({ current, total, score }) => {
+const GameProgress: React.FC<GameProgressProps> = ({ current, total, score, skippedCount = 0 }) => {
   const progressPercentage = (current / total) * 100;
+
+  // Update CSS custom property for progress width
+  React.useEffect(() => {
+    document.documentElement.style.setProperty('--progress-width', `${progressPercentage}%`);
+  }, [progressPercentage]);
 
   return (
     <div className="game-progress">
@@ -34,10 +40,7 @@ const GameProgress: React.FC<GameProgressProps> = ({ current, total, score }) =>
           aria-valuemax={total}
           aria-label={`Progress: ${current} of ${total} riddles completed`}
         >
-          <div 
-            className="progress-fill"
-            style={{ width: `${progressPercentage}%` }}
-          />
+          <div className="progress-fill" />
         </div>
       </div>
 
@@ -50,6 +53,12 @@ const GameProgress: React.FC<GameProgressProps> = ({ current, total, score }) =>
           <span className="stat-label">Remaining:</span>
           <span className="stat-value">{total - current + 1}</span>
         </div>
+        {skippedCount > 0 && (
+          <div className="stat-item">
+            <span className="stat-label">Skipped:</span>
+            <span className="stat-value">{skippedCount}</span>
+          </div>
+        )}
         <div className="stat-item">
           <span className="stat-label">Accuracy:</span>
           <span className="stat-value">

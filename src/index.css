@@ -1,17 +1,11 @@
 /* Global styles and CSS reset */
+:root {
+  --progress-width: 0%;
+}
+
 html {
   font-size: 16px;
   scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.6;
 }
 
 #root {
@@ -53,35 +47,7 @@ body {
   border: 0;
 }
 
-/* High contrast mode adjustments */
-@media (prefers-contrast: high) {
-  :root {
-    --primary-color: #0000FF;
-    --secondary-color: #00FF00;
-    --accent-color: #FF8000;
-    --background-color: #FFFFFF;
-    --surface-color: #FFFFFF;
-    --text-color: #000000;
-    --text-light: #333333;
-    --border-color: #000000;
-    --success-color: #008000;
-    --error-color: #FF0000;
-    --warning-color: #FF8000;
-  }
-}
 
-/* Reduced motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  
-  html {
-    scroll-behavior: auto;
-  }
-}
 
 /* Print styles */
 @media print {
@@ -103,3 +69,217 @@ body {
     box-shadow: none !important;
   }
 }
+
+/* Visual Hint Styles */
+.visual-hint-display {
+  background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+  border: 2px solid #9c27b0;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(156, 39, 176, 0.1);
+}
+
+.visual-hint-display h3 {
+  margin: 0 0 12px 0;
+  color: #7b1fa2;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.visual-hint-emoji {
+  font-size: 4rem;
+  line-height: 1;
+  margin: 8px 0;
+  display: block;
+  animation: gentle-pulse 2s ease-in-out infinite;
+}
+
+@keyframes gentle-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+/* Skip Button Styles */
+.skip-button {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(255, 152, 0, 0.3);
+  min-width: 100px;
+}
+
+.skip-button:hover {
+  background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 152, 0, 0.4);
+}
+
+.skip-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(255, 152, 0, 0.3);
+}
+
+.skip-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Visual Hint Button Styles */
+.visual-hint-button {
+  background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(156, 39, 176, 0.3);
+  min-width: 120px;
+}
+
+.visual-hint-button:hover {
+  background: linear-gradient(135deg, #7b1fa2 0%, #6a1b9a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(156, 39, 176, 0.4);
+}
+
+.visual-hint-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(156, 39, 176, 0.3);
+}
+
+.visual-hint-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Feedback Styles for New States */
+.feedback-visual-hint {
+  background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+  border: 2px solid #9c27b0;
+  color: #7b1fa2;
+}
+
+.feedback-skipped {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  border: 2px solid #ff9800;
+  color: #f57c00;
+}
+
+/* Mobile Responsiveness for New Buttons */
+@media (max-width: 768px) {
+  .button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  
+  .previous-button {
+    grid-column: 1 / -1;
+    order: 1;
+  }
+  
+  .hint-button,
+  .visual-hint-button {
+    order: 2;
+  }
+  
+  .skip-button {
+    order: 3;
+  }
+  
+  .visual-hint-emoji {
+    font-size: 3rem;
+  }
+  
+  .visual-hint-display {
+    padding: 12px;
+    margin: 12px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .button-group {
+    grid-template-columns: 1fr;
+  }
+  
+  .previous-button {
+    grid-column: 1;
+  }
+  
+  .visual-hint-emoji {
+    font-size: 2.5rem;
+  }
+}
+
+/* High Contrast Mode Adjustments for New Features */
+.high-contrast .visual-hint-display {
+  background: #ffffff;
+  border: 3px solid #000000;
+  color: #000000;
+}
+
+.high-contrast .visual-hint-display h3 {
+  color: #000000;
+}
+
+.high-contrast .skip-button {
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
+
+.high-contrast .visual-hint-button {
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
+
+.high-contrast .feedback-visual-hint {
+  background: #ffffff;
+  border: 3px solid #000000;
+  color: #000000;
+}
+
+.high-contrast .feedback-skipped {
+  background: #ffffff;
+  border: 3px solid #000000;
+  color: #000000;
+}
+
+/* Reduced Motion Adjustments */
+.reduced-motion .visual-hint-emoji {
+  animation: none;
+}
+
+.reduced-motion .skip-button:hover,
+.reduced-motion .visual-hint-button:hover {
+  transform: none;
+}
+
+.reduced-motion .skip-button:active,
+.reduced-motion .visual-hint-button:active {
+  transform: none;
+}
+
