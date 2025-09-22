@@ -94,6 +94,10 @@ body {
   color: var(--text-color);
   line-height: 1.6;
   font-size: var(--font-size-base);
+  /* Prevent horizontal scroll on mobile */
+  overflow-x: hidden;
+  /* Better touch scrolling */
+  -webkit-overflow-scrolling: touch;
 }
 
 .app {
@@ -563,6 +567,16 @@ body {
   color: var(--text-light);
 }
 
+.difficulty-badge {
+  background: var(--accent-color);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  text-align: center;
+}
+
 /* Answer Section */
 .answer-section {
   background: var(--surface-color);
@@ -593,6 +607,12 @@ body {
   background: var(--surface-color);
   color: var(--text-color);
   transition: border-color 0.2s ease;
+  /* Better mobile input */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Prevent zoom on iOS */
+  font-size: 16px;
 }
 
 .answer-input:focus {
@@ -618,32 +638,39 @@ body {
   flex-wrap: wrap;
 }
 
-.previous-button, .hint-button, .visual-hint-button, .show-answer-button, .skip-button {
+.submit-button, .hint-button, .skip-button {
   flex: 1;
-  min-width: 140px;
-  padding: var(--spacing-lg);
+  min-width: 120px;
+  padding: var(--spacing-xl);
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   font-size: var(--font-size-lg);
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
+  /* Better mobile touch handling */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.previous-button {
+.submit-button {
   background: var(--secondary-color);
   color: white;
 }
 
-.previous-button:hover:not(:disabled) {
-  background: #5a6c7d;
+.submit-button:hover:not(:disabled) {
+  background: #6BBE1A;
   transform: translateY(-1px);
 }
 
-.previous-button:disabled {
+.submit-button:disabled {
   background: var(--text-light);
   cursor: not-allowed;
   opacity: 0.6;
+  /* Make it clear the button is disabled on mobile */
+  pointer-events: none;
 }
 
 .hint-button {
@@ -662,46 +689,6 @@ body {
   opacity: 0.6;
 }
 
-.visual-hint-button {
-  background: var(--secondary-color);
-  color: white;
-}
-
-.visual-hint-button:hover:not(:disabled) {
-  background: #6BBE1A;
-  transform: translateY(-1px);
-}
-
-.visual-hint-button:disabled {
-  background: var(--text-light);
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.show-answer-button {
-  background: var(--warning-color);
-  color: white;
-  border: 2px solid transparent;
-  position: relative;
-}
-
-.show-answer-button:hover:not(:disabled) {
-  background: #E0961A;
-  transform: translateY(-1px);
-  border-color: var(--primary-color);
-}
-
-.show-answer-button:disabled {
-  background: var(--text-light);
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.show-answer-button:focus {
-  outline: 3px solid var(--accent-color);
-  outline-offset: 2px;
-  border-color: var(--primary-color);
-}
 
 .skip-button {
   background: var(--text-light);
@@ -719,7 +706,7 @@ body {
   opacity: 0.6;
 }
 
-.previous-button:focus, .hint-button:focus, .visual-hint-button:focus, .show-answer-button:focus, .skip-button:focus {
+.submit-button:focus, .hint-button:focus, .skip-button:focus {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
@@ -952,8 +939,41 @@ body {
   line-height: 1;
 }
 
-/* Responsive Design */
+/* Mobile-first optimizations */
 @media (max-width: 768px) {
+  .app {
+    padding: 0;
+  }
+  
+  .game-board {
+    padding: var(--spacing-md);
+    max-width: 100%;
+  }
+  
+  .riddle-card, .answer-section {
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .riddle-question {
+    font-size: var(--font-size-lg);
+    line-height: 1.4;
+  }
+  
+  .answer-input {
+    font-size: var(--font-size-lg);
+    padding: var(--spacing-lg);
+  }
+  
+  .button-group {
+    gap: var(--spacing-sm);
+  }
+  
+  .submit-button, .hint-button, .skip-button {
+    padding: var(--spacing-lg);
+    font-size: var(--font-size-lg);
+    min-height: 48px; /* Better touch targets */
+  }
   .welcome-content, .completion-content {
     padding: var(--spacing-lg);
     margin: var(--spacing-md);
@@ -997,7 +1017,7 @@ body {
     flex-direction: column;
   }
   
-  .previous-button, .hint-button, .visual-hint-button, .show-answer-button, .skip-button {
+  .submit-button, .hint-button, .skip-button {
     min-width: auto;
   }
   
@@ -1055,9 +1075,11 @@ body {
     padding: var(--spacing-md);
     font-size: var(--font-size-base);
   }
-  
-  .previous-button, .hint-button, .visual-hint-button, .show-answer-button, .skip-button {
-    padding: var(--spacing-md);
-    font-size: var(--font-size-base);
+}
+
+/* Larger screens - restore larger font size */
+@media (min-width: 769px) {
+  .answer-input {
+    font-size: var(--font-size-lg);
   }
 }

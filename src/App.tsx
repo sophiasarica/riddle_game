@@ -3,7 +3,7 @@ import { GameState, AccessibilitySettings } from './types';
 import { getRandomRiddlesByDifficulty } from './data/riddles';
 import GameBoard from './components/GameBoard';
 import WelcomeScreen from './components/WelcomeScreen';
-import AccessibilityPanel from './components/AccessibilityPanel';
+// import AccessibilityPanel from './components/AccessibilityPanel';
 import DifficultySwitch from './components/DifficultySwitch';
 import './App.css';
 
@@ -13,10 +13,8 @@ const initialGameState: GameState = {
   totalRiddles: 0,
   completedRiddles: [],
   skippedRiddles: [],
-  revealedAnswers: [],
   gameStatus: 'paused',
   showHint: false,
-  showVisualHint: false,
   showAnswer: false,
   userAnswer: '',
   feedback: 'none',
@@ -24,10 +22,8 @@ const initialGameState: GameState = {
 };
 
 const initialAccessibilitySettings: AccessibilitySettings = {
-  highContrast: false,
   largeText: false,
   soundEffects: true,
-  reducedMotion: false,
   showInstructions: true
 };
 
@@ -69,11 +65,11 @@ function App() {
   };
 
   return (
-    <div className={`app ${accessibilitySettings.highContrast ? 'high-contrast' : ''} ${accessibilitySettings.largeText ? 'large-text' : ''} ${accessibilitySettings.reducedMotion ? 'reduced-motion' : ''}`}>
-      <AccessibilityPanel 
+    <div className={`app ${accessibilitySettings.largeText ? 'large-text' : ''}`}>
+      {/* <AccessibilityPanel 
         settings={accessibilitySettings}
         onSettingsChange={updateAccessibilitySettings}
-      />
+      /> */}
       
       {gameState.gameStatus === 'paused' ? (
         <WelcomeScreen 

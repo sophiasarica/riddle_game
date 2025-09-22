@@ -48,142 +48,45 @@ const GameBoard: React.FC<GameBoardProps> = ({
     }, HINT_TIMEOUT);
   };
 
-  const showVisualHint = () => {
-    onGameStateChange({ 
-      showVisualHint: true, 
-      feedback: 'visual-hint' 
-    });
-
-    // Play hint sound if enabled
-    if (accessibilitySettings.soundEffects) {
-      playSound('hint');
-    }
-
-    // Clear feedback after delay
-    setTimeout(() => {
-      onGameStateChange({ feedback: 'none' });
-    }, HINT_TIMEOUT);
-  };
 
   const skipRiddle = () => {
-    // Apply light score penalty (0.5 points instead of 1)
-    const newScore = Math.max(0, gameState.score - 0.5);
-    
-    onGameStateChange({
-      score: newScore,
-      skippedRiddles: [...gameState.skippedRiddles, currentRiddle.id],
-      feedback: 'skipped',
-      userAnswer: ''
-    });
-
-    // Play skip sound if enabled
-    if (accessibilitySettings.soundEffects) {
-      playSound('error');
-    }
-
-    // Move to next riddle after showing feedback
-    setTimeout(() => {
-      if (gameState.currentRiddleIndex < currentRiddles.length - 1) {
-        onGameStateChange({
-          currentRiddleIndex: gameState.currentRiddleIndex + 1,
-          feedback: 'none',
-          userAnswer: '',
-          showHint: false,
-          showVisualHint: false,
-          showAnswer: false
-        });
-        setUserInput('');
-      } else {
-        onGameStateChange({
-          gameStatus: 'completed',
-          feedback: 'none'
-        });
-      }
-    }, 2000);
-  };
-
-  const revealAnswer = () => {
-    // Reset score to 0 (no points for revealed answers)
-    // Add to revealed answers list
-    onGameStateChange({
-      score: 0,
-      revealedAnswers: [...gameState.revealedAnswers, currentRiddle.id],
-      showAnswer: true,
-      feedback: 'answer-revealed',
-      userAnswer: ''
-    });
-
-    // Play hint sound if enabled
-    if (accessibilitySettings.soundEffects) {
-      playSound('hint');
-    }
-
-    // Move to next riddle after showing feedback
-    setTimeout(() => {
-      if (gameState.currentRiddleIndex < currentRiddles.length - 1) {
-        onGameStateChange({
-          currentRiddleIndex: gameState.currentRiddleIndex + 1,
-          feedback: 'none',
-          userAnswer: '',
-          showHint: false,
-          showVisualHint: false,
-          showAnswer: false
-        });
-        setUserInput('');
-      } else {
-        onGameStateChange({
-          gameStatus: 'completed',
-          feedback: 'none'
-        });
-      }
-    }, HINT_TIMEOUT);
-  };
-
-  const previousRiddle = () => {
-    if (gameState.currentRiddleIndex > 0) {
+    // Move to next riddle
+    if (gameState.currentRiddleIndex < currentRiddles.length - 1) {
       onGameStateChange({
-        currentRiddleIndex: gameState.currentRiddleIndex - 1,
+        currentRiddleIndex: gameState.currentRiddleIndex + 1,
         feedback: 'none',
         userAnswer: '',
         showHint: false,
-        showVisualHint: false,
         showAnswer: false
       });
       setUserInput('');
-
-      // Play navigation sound if enabled
-      if (accessibilitySettings.soundEffects) {
-        playSound('hint');
-      }
+    } else {
+      onGameStateChange({
+        gameStatus: 'completed',
+        feedback: 'none'
+      });
     }
   };
 
+
   const submitAnswer = () => {
-    if (!userInput.trim() || gameState.showAnswer) {
+    const trimmedInput = userInput.trim();
+    console.log('Submit button clicked!', { userInput, trimmedInput, currentAnswer: currentRiddle.answer });
+    
+    if (!trimmedInput) {
+      console.log('No input provided');
       return;
     }
 
-    const isCorrect = userInput.toLowerCase().trim() === currentRiddle.answer.toLowerCase().trim();
+    const isCorrect = trimmedInput.toLowerCase() === currentRiddle.answer.toLowerCase().trim();
+    console.log('Answer check:', { trimmedInput, currentAnswer: currentRiddle.answer, isCorrect });
     
     if (isCorrect) {
-      // Correct answer - award points based on difficulty
-      let points = 0;
-      switch (currentRiddle.difficulty) {
-        case 'easy':
-          points = 1;
-          break;
-        case 'medium':
-          points = 2;
-          break;
-        case 'difficult':
-          points = 3;
-          break;
-      }
-
+      // Correct answer - award 1 point
       onGameStateChange({
-        score: gameState.score + points,
+        score: gameState.score + 1,
         feedback: 'correct',
-        userAnswer: userInput.trim()
+        userAnswer: trimmedInput
       });
 
       // Play success sound if enabled
@@ -199,7 +102,6 @@ const GameBoard: React.FC<GameBoardProps> = ({
             feedback: 'none',
             userAnswer: '',
             showHint: false,
-            showVisualHint: false,
             showAnswer: false
           });
           setUserInput('');
@@ -214,7 +116,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
       // Incorrect answer
       onGameStateChange({
         feedback: 'incorrect',
-        userAnswer: userInput.trim()
+        userAnswer: trimmedInput
       });
 
       // Play error sound if enabled
@@ -290,7 +192,6 @@ const GameBoard: React.FC<GameBoardProps> = ({
       <RiddleCard 
         riddle={currentRiddle}
         showHint={gameState.showHint}
-        showVisualHint={gameState.showVisualHint}
         showAnswer={gameState.showAnswer}
         feedback={gameState.feedback}
       />
@@ -304,74 +205,70 @@ const GameBoard: React.FC<GameBoardProps> = ({
             id="answer-input"
             type="text"
             value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
+            onChange={(e) => {
+              console.log('Input changed:', e.target.value);
+              setUserInput(e.target.value);
+            }}
             onKeyDown={handleKeyDown}
             placeholder="Type your answer here..."
             className="answer-input"
             autoComplete="off"
             autoFocus
             disabled={gameState.showAnswer}
+            inputMode="text"
+            enterKeyHint="send"
           />
         </div>
 
         <div className="button-group">
           <button 
-            className="previous-button"
-            onClick={previousRiddle}
-            disabled={gameState.currentRiddleIndex === 0}
-            aria-label="Go to previous riddle"
+            className="submit-button"
+            onClick={(e) => {
+              console.log('Button clicked!', e);
+              submitAnswer();
+            }}
+            disabled={!userInput.trim() || gameState.showAnswer}
+            aria-label="Submit your answer"
+            type="button"
+            style={{ 
+              backgroundColor: (!userInput.trim() || gameState.showAnswer) ? '#ccc' : undefined 
+            }}
           >
-            ← Previous Riddle
+            ✓ Submit Answer {!userInput.trim() ? '(Empty)' : ''}
           </button>
 
-          {currentRiddle.hint && (
-            <button 
-              className="hint-button"
-              onClick={showHint}
-              disabled={gameState.showHint || gameState.showAnswer}
-              aria-label="Get a text hint for this riddle"
-            >
-              💡 Hint
-            </button>
-          )}
-
-          {currentRiddle.visualHint && (
-            <button 
-              className="visual-hint-button"
-              onClick={showVisualHint}
-              disabled={gameState.showVisualHint || gameState.showAnswer}
-              aria-label="Get a visual hint for this riddle"
-            >
-              👁️ Visual Hint
-            </button>
-          )}
-
           <button 
-            className="show-answer-button"
-            onClick={revealAnswer}
-            disabled={gameState.showAnswer}
-            aria-label="Show the answer (no points awarded)"
+            className="hint-button"
+            onClick={showHint}
+            disabled={gameState.showHint || gameState.showAnswer}
+            aria-label="Get a hint for this riddle"
           >
-            💡 Show Answer
+            💡 Hint
           </button>
 
           <button 
             className="skip-button"
             onClick={skipRiddle}
             disabled={gameState.showAnswer}
-            aria-label="Skip this riddle (small score penalty)"
+            aria-label="Skip this riddle"
           >
             ⏭️ Skip
+          </button>
+          
+          {/* Debug button - always enabled */}
+          <button 
+            className="hint-button"
+            onClick={() => {
+              console.log('Debug button clicked!', { userInput, gameState });
+              alert(`Input: "${userInput}", Length: ${userInput.length}`);
+            }}
+            style={{ backgroundColor: '#ff6b6b' }}
+          >
+            🐛 Debug
           </button>
         </div>
       </div>
 
-      {accessibilitySettings.showInstructions && (
-        <div className="game-instructions" role="region" aria-label="Current Game Instructions">
-          <p><strong>Navigation:</strong> Use the Previous Riddle button to go back to earlier riddles.</p>
-          <p><strong>Show Answer:</strong> Use this button if you need help - it won't give you points but will show the correct answer.</p>
-        </div>
-      )}
     </div>
   );
 };

@@ -35,23 +35,12 @@ const AccessibilityPanel: React.FC<AccessibilityPanelProps> = ({
             <label className="setting-item">
               <input
                 type="checkbox"
-                checked={settings.highContrast}
-                onChange={() => toggleSetting('highContrast')}
-                aria-describedby="high-contrast-desc"
-              />
-              <span>High Contrast Mode</span>
-              <small id="high-contrast-desc">Makes colors easier to see</small>
-            </label>
-
-            <label className="setting-item">
-              <input
-                type="checkbox"
                 checked={settings.largeText}
                 onChange={() => toggleSetting('largeText')}
                 aria-describedby="large-text-desc"
               />
               <span>Large Text</span>
-              <small id="large-text-desc">Makes text bigger and easier to read</small>
+              <small id="large-text-desc">Makes text bigger</small>
             </label>
 
             <label className="setting-item">
@@ -63,28 +52,6 @@ const AccessibilityPanel: React.FC<AccessibilityPanelProps> = ({
               />
               <span>Sound Effects</span>
               <small id="sound-effects-desc">Plays sounds for feedback</small>
-            </label>
-
-            <label className="setting-item">
-              <input
-                type="checkbox"
-                checked={settings.reducedMotion}
-                onChange={() => toggleSetting('reducedMotion')}
-                aria-describedby="reduced-motion-desc"
-              />
-              <span>Reduce Motion</span>
-              <small id="reduced-motion-desc">Reduces animations and movement</small>
-            </label>
-
-            <label className="setting-item">
-              <input
-                type="checkbox"
-                checked={settings.showInstructions}
-                onChange={() => toggleSetting('showInstructions')}
-                aria-describedby="show-instructions-desc"
-              />
-              <span>Show Instructions</span>
-              <small id="show-instructions-desc">Shows helpful instructions</small>
             </label>
           </div>
 

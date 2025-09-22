@@ -13,21 +13,17 @@ export interface GameState {
   score: number;
   totalRiddles: number;
   completedRiddles: number[];
-  skippedRiddles: number[]; // Track skipped riddles
-  revealedAnswers: number[]; // Track riddles where answer was revealed
+  skippedRiddles: number[];
   gameStatus: 'playing' | 'completed' | 'paused';
   showHint: boolean;
-  showVisualHint: boolean;
-  showAnswer: boolean; // Track if current riddle's answer is revealed
+  showAnswer: boolean;
   userAnswer: string;
-  feedback: 'none' | 'correct' | 'incorrect' | 'hint' | 'visual-hint' | 'skipped' | 'answer-revealed';
+  feedback: 'none' | 'correct' | 'incorrect' | 'hint' | 'skipped';
   selectedDifficulty: 'easy' | 'medium' | 'difficult';
 }
 
 export interface AccessibilitySettings {
-  highContrast: boolean;
   largeText: boolean;
   soundEffects: boolean;
-  reducedMotion: boolean;
   showInstructions: boolean;
 }
