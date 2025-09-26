@@ -3,7 +3,7 @@ import { GameState, AccessibilitySettings } from './types';
 import { getRandomRiddlesByDifficulty } from './data/riddles';
 import GameBoard from './components/GameBoard';
 import WelcomeScreen from './components/WelcomeScreen';
-// import AccessibilityPanel from './components/AccessibilityPanel';
+import AccessibilityPanel from './components/AccessibilityPanel';
 import DifficultySwitch from './components/DifficultySwitch';
 import './App.css';
 
@@ -66,10 +66,10 @@ function App() {
 
   return (
     <div className={`app ${accessibilitySettings.largeText ? 'large-text' : ''}`}>
-      {/* <AccessibilityPanel 
+      <AccessibilityPanel 
         settings={accessibilitySettings}
         onSettingsChange={updateAccessibilitySettings}
-      /> */}
+      />
       
       {gameState.gameStatus === 'paused' ? (
         <WelcomeScreen 
@@ -78,7 +78,7 @@ function App() {
         >
           <DifficultySwitch
             selectedDifficulty={gameState.selectedDifficulty}
-            onDifficultyChange={(difficulty) => updateGameState({ selectedDifficulty: difficulty })}
+            onDifficultyChange={(difficulty: 'easy' | 'medium' | 'difficult') => updateGameState({ selectedDifficulty: difficulty })}
           />
         </WelcomeScreen>
       ) : (
@@ -91,7 +91,7 @@ function App() {
         >
           <DifficultySwitch
             selectedDifficulty={gameState.selectedDifficulty}
-            onDifficultyChange={(difficulty) => {
+            onDifficultyChange={(difficulty: 'easy' | 'medium' | 'difficult') => {
               updateGameState({ selectedDifficulty: difficulty });
               // Restart game with new difficulty
               const newRiddles = getRandomRiddlesByDifficulty(difficulty, 10);

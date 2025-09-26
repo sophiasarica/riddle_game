@@ -18,7 +18,7 @@ export interface GameState {
   showHint: boolean;
   showAnswer: boolean;
   userAnswer: string;
-  feedback: 'none' | 'correct' | 'incorrect' | 'hint' | 'skipped';
+  feedback: 'none' | 'correct' | 'incorrect' | 'hint' | 'skipped' | 'answer-revealed';
   selectedDifficulty: 'easy' | 'medium' | 'difficult';
 }
 
