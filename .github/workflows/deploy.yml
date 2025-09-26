@@ -30,7 +30,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist  # The folder the action should deploy
-          branch: main  # The branch the action should deploy to
+          branch: gh-pages  # The branch the action should deploy to
           repository-name: sophiasarica/sophiasarica.github.io  # The repository to deploy to
           target-folder: riddle_game  # The folder the action should deploy to
           clean: true  # Automatically remove deleted files from the deployment
